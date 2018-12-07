@@ -1,23 +1,24 @@
 <Gerenciador>:
-	Menu:
+	Menu:#primeira a ser exibida
 		name:'menu'
 	Jogo:
 		id:gerenciador
 		name:'jogo'
 	Quiz:
 		name:'quiz'
+	Teste:
+		name:'teste'
+	Ranking:
+		name:'ranking'
+
 <Menu>:
-	on_enter:
-		button1.state = 'normal'
-		button2.state = 'normal'
-		button3.state = 'normal'
 	BoxLayout:
 		orientation:'vertical'
-		padding:100
-		spacing:10
+		padding:root.width*0.10,root.height*0.1 #preencher
+		spacing:'10dp' #espacamento
 		canvas:
 			Color:
-				rgba: 128,128,128,1
+				rgba: 1,1,1,1 #rgb max 1
 			Rectangle:
 				size:self.size
 				pos:self.pos
@@ -35,13 +36,16 @@
 			on_release:app.root.current='quiz'
 		Botao:
 			id:button3
-			text:'Informações'
-			on_release:app.stop()
+			text:'Testes'
+			on_release:root.fimdejogo()
+		Botao:
+			id:button4
+			text:'Placar'
+			on_release:app.root.current='ranking'
 
-<Botao@ButtonBehavior+Label>:
-	font_size: '20sp'
-	size_hint: .9,.9
+<Botao@ButtonBehavior+LabelBotao>:
 	pos_hint: {'center_x':.5,'center_y':.5}
+
 	canvas.before:
 		Color:
 			rgba:0.30,0.14,0,1 #marrom 77/255,38/255,0,1 #azul 0.1,0.5,0.7,1
@@ -54,42 +58,15 @@
 		Rectangle:
 			pos:self.x+self.height/2.0,self.y
 			size:self.width-self.height,self.height
-<Botaojogo@ButtonBehavior+Label>:
-	font_size: '15sp'
-	size_hint: .9,.9
-	color:0,0,0
-	pos_hint: {'center_x':.5,'center_y':.5}
-	canvas.before:
-		Color:
-			rgba:1,1,1,1
-		Ellipse:
-			pos:self.pos
-			size:self.height,self.height
-		Ellipse:
-			pos:self.x+self.width-self.height,self.y
-			size:self.height,self.height
-		Rectangle:
-			pos:self.x+self.height/2.0,self.y
-			size:self.width-self.height,self.height
-<Botaojogoquadrado@ButtonBehavior+Label>:
-	font_size: '20sp'
-	size_hint: .5,.1
-	pos_hint: {'center_x':.5,'center_y':.5}
-	canvas.before:
-		Color:
-			rgba:0.33,0.17,0.01,1
-		Rectangle:
-			pos:self.x+self.height/2.0,self.y
-			size:self.width-self.height,self.height
-<Jogo>:
 
+<Jogo>:
 	BoxLayout:
 		id:boxjogo
 		pos_hint: {'top':1}
 		orientation:'vertical'
 		canvas:
 			Color:
-				rgba: 128,128,128,1
+				rgba: 1,1,1,1
 			Rectangle:
 				size:self.size
 				pos:self.pos
@@ -111,47 +88,45 @@
 						Rectangle:
 							pos:self.pos
 							size:self.size
-				ActionButton:
-					text:'Sair'	
-					on_release:app.stop()
-
-		ScrollView:
-			GridLayout:
-				id:gridlayout
-				padding:10
-				spacing:10
-				cols:4
+		GridLayout:
+			id:gridlayout	
+			spacing:10
+			cols:4
 	BoxLayout:
 		id:tbox
 		orientation:'vertical'
-		Label:			
-			pos_hint: {'center_x':.5,'center_y':.5}
-			font_size:'25sp'
-			pos_hint: {'top':9}
-			text: "[b]{}[/b]".format("Selecione a quantidade de imagens")
-			markup: True
-			color:0,0,0,1
+		
+		MyLabel:
+			text:" "
+
 		GridLayout:
 			id:botaoiniciar
+			orientation:'vertical'
 			pos_hint: {'top':.7}
 			size_hint_y:None
 			width:.9
 			padding:15
 			spacing:20
-			orientation:'vertical'
 			cols:3
 			Botao:
 				text:"4"
 				size_hint:0.2,0.2
-				on_release:root.addImagem(4),app.root.get_screen('jogo').remove_widget(app.root.get_screen('jogo').ids.tbox)		
+				on_release:
+					root.addImagem(4)
+					app.root.get_screen('jogo').remove_widget(app.root.get_screen('jogo').ids.tbox)		
 			Botao:
 				size_hint:0.2,0.2
 				text:'6'
-				on_release:root.addImagem(6),app.root.get_screen('jogo').remove_widget(app.root.get_screen('jogo').ids.tbox)
+				on_release:
+					root.addImagem(6)
+					app.root.get_screen('jogo').remove_widget(app.root.get_screen('jogo').ids.tbox)
 			Botao:
 				size_hint:0.2,0.2
 				text:'10'
-				on_release:root.addImagem(10),app.root.get_screen('jogo').remove_widget(app.root.get_screen('jogo').ids.tbox)
+				on_release:
+					root.addImagem(10)
+					app.root.get_screen('jogo').remove_widget(app.root.get_screen('jogo').ids.tbox)
+
 <Quiz>:
 	BoxLayout:		
 		orientation:'vertical'	
@@ -173,9 +148,6 @@
 						Rectangle:
 							pos:self.pos
 							size:self.size
-				ActionButton:
-					text:'Sair'	
-					on_release:app.stop()
 		BoxLayout:
 			orientation:'vertical'
 			canvas:
@@ -185,14 +157,261 @@
 					pos:self.pos
 					size:self.size
 					source:'imagens/obras.jpg'
-<ImagemBloco>:
+
+<ImageButton>:
+	id:button
 	text:''
-	ImageButton:
-		id:button
-		text:''
-		source: 'imagens/pergunta.png'
-		on_release:root.troca(str(self.text))#root.conta(str(self.text))
-	
+	source: 'imagens/pergunta.png'
+	on_press:
+	on_release:root.troca(str(self.text))#root.conta(str(self.text))
 
+<Pronto>:
+	BoxLayout:
+		id:principal
+		orientation:'vertical'
+		BoxLayout:
+			id:primaria
+			orientation:'horizontal'
+			
+			pos_hint:{'x':1}#max em cima em x
+			pos_hint:{'y':1}#max em cima em y
+			size_hint:[1,.08]#max em x e 8% em y
+			
+			canvas:
+				Color:
+					rgba:1,1,1,1
+				Rectangle:
+					pos:self.pos
+					size:self.size
+			
+			ActionBar:
+				pos_hint: {'top':1}  #na parte superior da tela'
+				background_color: 0, 0, 0, 1
+				size:self.size
+				ActionView:				
+					ActionPrevious:
+						app_icon: ''			
+						title:'Voltar'
+						on_release:root.previous_screen()
+					ActionButton:
+						id:action_iniciar
+						text:'Recomeçar'	
+						on_release:root.previous_screen_limpa()
+						canvas.before:
+							Color:
+								rgba:0.33,0.17,0.01,1
+							Rectangle:
+								pos:self.pos
+								size:self.size
+		GridLayout:
+			id:gridlayout
+			padding:10
+			spacing:10
+			cols:4
+								
+<Teste>:
+	BoxLayout:
+		id:principal
+		orientation:'vertical'
+		BoxLayout:
+			id:primaria
+			orientation:'horizontal'
+			
+			pos_hint:{'x':1}#max em x
+			pos_hint:{'y':1}#10% em y
+			size_hint:[1,.08]#max em x e 8% em y
+			
+			canvas:
+				Color:
+					rgba:1,1,1,1
+				Rectangle:
+					pos:self.pos
+					size:self.size
+			
+			ActionBar:
+				pos_hint: {'top':1}  #na parte superior da tela'
+				background_color: 0, 0, 0, 1
+				size:self.size
+				ActionView:				
+					ActionPrevious:
+						app_icon: ''			
+						title:'Voltar'
+						on_release:root.previous_screen()
+					ActionButton:
+						id:action_iniciar
+						text:'Recomeçar'	
+						on_release:root.previous_screen_limpa()
+						canvas.before:
+							Color:
+								rgba:0.33,0.17,0.01,1
+							Rectangle:
+								pos:self.pos
+								size:self.size
+		
+			
+		BoxLayout:
+			id:secundaria
+			orientation:'vertical'
+			canvas:
+				Color:
+					rgba:0,0,1,1
+				Rectangle:
+					pos:self.pos
+					size:self.size
+			
+			BoxLayout:
+				orientation:'horizontal'
+				MyLabel:	
+					text:" "
+			BoxLayout:
+				id:gridlayout
+				orientation:'horizontal'
+				GridLayout:
+					id:botaoiniciar
+					orientation:'horizontal'
+					pos_hint: {'x':.1}
+					size_hint_y:None
+					padding:15
+					spacing:20
+					cols:3
+					Botao:
+						text:"4"
+						size_hint:0.2,0.2
+						on_release:root.addImagem(4)		
+					Botao:
+						size_hint:0.2,0.2
+						text:'6'
+						on_release:
+							root.addImagem(6)
+							app.root.get_screen('teste').remove_widget(app.root.get_screen('teste').ids.principal)
+					Botao:
+						size_hint:0.2,0.2
+						text:'10'
+						on_release:
+							root.addImagem(10)
+							app.root.get_screen('teste').remove_widget(app.root.get_screen('jogo').ids.secundaria)		
+			ScrollView:
+				GridLayout:
+					id:gridlayout
+					padding:10
+					spacing:10
+					cols:4	
 
+<BotaoRounded@ButtonBehavior+LabelBotao>:
+	pos_hint: {'center_x':.5,'center_y':.5}
 
+	canvas.before:
+		Color:
+			rgba: 0.30,0.14,0,.8
+		RoundedRectangle:
+			pos: self.pos
+			size: self.size
+			radius: [25,25]
+
+<Inserenome>:
+	BoxLayout:
+		canvas.before:
+			Color:
+				rgba: 1,1,1,.8#0.30,0.14,0,1
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [50,]
+		TextInput:
+			id:texinp
+			size_hint:[.8,.8]
+			hint_text: 'Escreva seu nome'
+			font_size: '14dp'
+			background_color: 1,1,0,0
+			input_filter:lambda text, from_undo: text[:20 - len(self.text)]
+	BoxLayout:
+
+		size_hint:[.2,1]
+		BotaoRounded:
+			spacing:'40dp'
+			text:'Salvar'
+			on_release:root.salvanome()
+
+<Ranking>:
+    BoxLayout:
+        orientation:'vertical'
+        canvas.before:
+			Color:
+				rgba:1,1,1,1
+			Rectangle:
+				pos:self.pos
+				size:self.size
+		ActionBar:
+			pos_hint: {'top':1}  #na parte superior da tela'
+			background_color:0,0,0,1
+			size:self.size
+			ActionView:				
+				ActionPrevious:
+					app_icon: ''			
+					title:'Voltar'
+					on_release:root.previous_screen_limpa()
+				ActionButton:
+					id:action
+					text:'Atualizar placar'	
+					on_release:root.teste()
+					cor : 0.33,0.17,0.01,1
+					canvas.before:
+						Color:
+							rgba:self.cor
+						Rectangle:
+							pos:self.pos
+							size:self.size
+					
+        BoxLayout:
+        	orientation:'horizontal'
+        	size_hint:1,.1
+        	canvas.before:
+				Color:
+					rgba:0.30,0.14,0,.9#25/255, 123/255, 98/255,1
+				Rectangle:
+					pos:self.pos
+					size:self.size
+        	LabelBotao:
+        		color:1,1,1,1
+        		text:'N°'
+        	LabelBotao:
+        		color:1,1,1,1
+        		text:'Nome'
+        	LabelBotao:
+        		color:1,1,1,1
+        		text:'Pontos'
+        	LabelBotao:
+        		color:1,1,1,1
+        		text:'Erros'
+        	LabelBotao:
+        		color:1,1,1,1
+        		text:'Tempo'
+        ScrollView:
+            BoxLayout:
+                id:box
+                orientation:'vertical'
+                size_hint_y:None
+                height:self.minimum_height
+
+<BoxLayoutCustom>:
+	orientation:'horizontal'
+	size_hint_y:None
+	height:dp(50)
+	cor:0.4,0.2,0.1,.8
+	canvas:
+		Color:
+			rgba:self.cor
+		Rectangle:
+			pos:self.pos
+			size:self.size
+
+<Tarefa>:
+	orientation:'horizontal'
+    size_hint_y:None
+    height:dp(50)
+    LabelBotao:
+        id:label
+        color:0,0,0,1
+        font_size:dp(20)
+
+				
