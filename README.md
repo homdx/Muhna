@@ -1,7 +1,7 @@
 # Muhna
 Aplicativo para o Museu de História Natural do Araguaia feito com python e kivy.
 
-Arquivo Json =  dicionário para exibir os nomes dos animais
+Arquivo Json =  dicionário para exibir os nomes
 
 buildozer.spec = configs para gerar o apk com o buildozer em VM
 
