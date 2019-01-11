@@ -1,4 +1,9 @@
 # Muhna
+
+Download apk from releases page:
+Muhna-py2.apk - For old verison Android
+Muhna-py3.apk - For Android 5.x and later
+
 Aplicativo para o Museu de História Natural do Araguaia feito com python e kivy.
 
 Arquivo Json =  dicionário para exibir os nomes
