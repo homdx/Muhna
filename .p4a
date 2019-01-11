@@ -1,0 +1,5 @@
+--arch=armeabi-v7a
+--name 'MuhNa'
+--package com.mohna.test
+--version 1
+--requirements=python3,kivy,sqlite3
